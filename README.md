@@ -1,8 +1,8 @@
 # R1 教师控制台
 
-关键词：Unitree R1、宇树 R1 EDU、人形机器人、humanoid robot、具身智能、embodied AI、教师控制台、teacher console、CycloneDDS、arm_sdk、MediaPipe、手势识别、动作模仿、双目相机、stereo vision、近距迎宾、DeepSeek、图形化编程
+关键词：Unitree R1、宇树 R1 EDU、人形机器人、humanoid robot、具身智能、embodied AI、教师控制台、teacher console、r1-teacher-studio、CycloneDDS、arm_sdk、MediaPipe、手势识别、动作模仿、关键帧、动作库、技能包、skill pack、r1-arm-imitate-mirror、eduplatform-skillpack、双目相机、stereo vision、近距迎宾、DeepSeek、图形化编程
 
-教师笔记本上的课堂控制台，用来指挥 Unitree R1 EDU：白名单命名动作、键盘和手势、校园识物、图形化程序、语音问答、原地近距迎宾，以及上肢动作模仿。机器人不接入教学平台公网。网页只监听 `127.0.0.1`。
+教师笔记本上的课堂控制台，用来指挥 Unitree R1 EDU：白名单命名动作、键盘和手势、校园识物、图形化程序、语音问答、原地近距迎宾、上肢动作模仿，以及与课程平台同一格式的关键帧动作库和技能包。机器人不接入教学平台公网。网页只监听 `127.0.0.1`。动作组文件是 `r1-arm-imitate-mirror/v1`，技能包是 `eduplatform-skillpack/v3`。
 
 这是实验室代码。真机各项还没有按 [docs/实验室测试清单.md](docs/实验室测试清单.md) 整项跑通。连真机时遥控器急停拿在手里。
 
@@ -10,7 +10,7 @@
 
 | 功能 | 入口 | 做什么 |
 | --- | --- | --- |
-| 教师控制台 | `python -m r1_studio` | 浏览器 http://127.0.0.1:8765 。八个选项卡见下文。 |
+| 教师控制台 | `python -m r1_studio` | 浏览器 http://127.0.0.1:8765 。选项卡见下文。 |
 | 语音 / 文本动作 | `python -m r1_agent` | 中文句子或 R1 麦克风 → `actions.json` 里的动作名 → 网线 DDS。左右是机器人自己的左右。 |
 | 上肢模仿仿真 | `python -m imitate` | MediaPipe Pose → 双臂 10 轴，MuJoCo 预览。人的右手对应机器人左臂（蓝）。 |
 | 左右眼试看 | `scripts/r1_stereo_preview.py` | 单独网页看左眼、右眼和本地视差。不走教师台，也不当安全距离。 |
@@ -58,7 +58,8 @@ PYTHONPATH=. .venv-r1/bin/python -m r1_studio --hardware --r1-camera --interface
 | 图形化编程 | 把白名单动作排成程序，可下载 `.r1prog.json`。 |
 | 语音问答 | 打字或听一轮，规划器只输出动作库里的名字。 |
 | 近距迎宾 | 在 video_hub 右眼画面上用肩宽或躯干估距。约 0.5–1.8 米原地挥手；0.3–0.5 米只提醒退后；0.3 米内停手。这个模式不走路。 |
-| 动作模仿 | 人抬右手，机器人左臂跟着动。须在走跑模式。 |
+| 动作模仿 | 人抬右手，机器人左臂跟着动。须在走跑模式。记关键帧时保持这一页开启。 |
+| 动作库与技能 | 保存关键帧动作组，导出平台同款 JSON 和技能包 ZIP，并在本地运行教学 Python 指令。 |
 | 扳手腕 | 本页不进调试、也不发走跑。用遥控器进入调试，跑原来的扳手腕程序。结束后必须关机再开机。 |
 
 图传走 `video_hub` 的单张 JPEG（1280×720）。2026-09-24 挡住左眼画面不变，这路是右眼单独在拍。左右眼 UDP 5002/5003 要另开 stereo patch，并且会和 video_hub 冲突，所以教师台不切过去。
